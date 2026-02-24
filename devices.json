@@ -2,7 +2,7 @@
   "devices": [
     { "name": "Router", "host": "192.168.1.1" },
     { "name": "LED Control", "host": "192.168.1.39" },
-    { "name": "Google DNS", "host": "1.1.1.1" },
+    { "name": "Google DNS", "host": "10.46.16.1" },
     { "name": "Sound Console", "host": "192.168.1.101" },
     { "name": "ProxMox", "host": "192.168.1.100" }
     
