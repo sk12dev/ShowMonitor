@@ -1,6 +1,20 @@
 # Installing ShowMonitor on Ubuntu Server
 
-## 1. Prerequisites on Ubuntu
+## Automated install (recommended)
+
+On a fresh Ubuntu server you can run the install script (replace the repo URL with yours):
+
+```bash
+sudo REPO_URL=https://github.com/YOUR_ORG/ShowMonitor.git ./install.sh
+```
+
+Options: `-d` install dir, `-r` repo URL, `-s` nginx server_name, `-u` service user, `-n` skip nginx. See `./install.sh -h`.
+
+---
+
+## Manual install
+
+### 1. Prerequisites on Ubuntu
 
 - **Node.js** (LTS, e.g. 20.x or 22.x). Two common options:
   - **NodeSource:**  
@@ -9,7 +23,7 @@
 - **Git:**  
   `sudo apt-get install -y git`
 
-## 2. Get the app and install dependencies
+### 2. Get the app and install dependencies
 
 ```bash
 cd /opt   # or /var/www or wherever you prefer
@@ -20,11 +34,11 @@ sudo npm install
 
 (Use your actual repo URL if different.)
 
-## 3. Configure devices
+### 3. Configure devices
 
 Edit `devices.json` in the project root with the hosts you want to monitor (see main README for format).
 
-## 4. Build the frontend
+### 4. Build the frontend
 
 ```bash
 npm run build
@@ -32,7 +46,7 @@ npm run build
 
 This creates the production frontend in `dist/`.
 
-## 5. Run the API server in production
+### 5. Run the API server in production
 
 The server is TypeScript and only has a dev script (`tsx server/index.ts`). For production you can:
 
@@ -44,7 +58,7 @@ The server is TypeScript and only has a dev script (`tsx server/index.ts`). For 
 
 The API listens on **port 3001** and does **not** serve the `dist/` folder; it only exposes `/api/status`.
 
-## 6. Serve the frontend and proxy `/api`
+### 6. Serve the frontend and proxy `/api`
 
 You need a reverse proxy so that:
 
@@ -81,7 +95,7 @@ sudo ln -s /etc/nginx/sites-available/showmonitor /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-## 7. Keep the API server running (systemd)
+### 7. Keep the API server running (systemd)
 
 Create `/etc/systemd/system/showmonitor.service`:
 
@@ -112,7 +126,7 @@ sudo systemctl start showmonitor
 
 Adjust `User` to match who should own the app files (e.g. `www-data` or a dedicated user). If you need to run as root for ICMP (see below), change `User=` accordingly.
 
-## 8. ICMP ping on Linux
+### 8. ICMP ping on Linux
 
 The app uses the `ping` npm package, which shells out to the system `ping` binary. On Linux, sending ICMP typically requires **CAP_NET_RAW** or root.
 

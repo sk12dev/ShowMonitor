@@ -14,6 +14,12 @@ function App() {
   const [latencyHistory, setLatencyHistory] = useState<
     Record<string, (number | null)[]>
   >({})
+  const [now, setNow] = useState(() => new Date())
+
+  useEffect(() => {
+    const tick = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(tick)
+  }, [])
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -50,11 +56,28 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background p-6">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold text-foreground">ShowMonitor</h1>
-        <p className="text-sm text-muted-foreground">
-          Ping monitoring dashboard
-        </p>
+      <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">ShowMonitor</h1>
+          <p className="text-sm text-muted-foreground">
+            Ping monitoring dashboard
+          </p>
+        </div>
+        <div className="text-right text-sm font-medium tabular-nums text-muted-foreground">
+          {now.toLocaleDateString(undefined, {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })}
+          <br />
+          {now.toLocaleTimeString(undefined, {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true,
+          })}
+        </div>
       </header>
 
       {error && (
