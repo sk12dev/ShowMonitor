@@ -14,8 +14,8 @@ interface DeviceCardProps {
   latencyHistory: (number | null)[]
 }
 
-const SPARKLINE_WIDTH = 120
-const SPARKLINE_HEIGHT = 28
+const SPARKLINE_WIDTH = 80
+const SPARKLINE_HEIGHT = 20
 const LATENCY_SCALE_MAX_MS = 100
 
 function Sparkline({ history }: { history: (number | null)[] }) {
@@ -55,28 +55,28 @@ export function DeviceCard({ device, latencyHistory }: DeviceCardProps) {
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="flex items-center gap-2">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 p-3 pb-1">
+        <div className="flex items-center gap-1.5">
           {isUp ? (
-            <Wifi className="h-5 w-5 text-emerald-500" />
+            <Wifi className="h-4 w-4 shrink-0 text-emerald-500" />
           ) : (
-            <WifiOff className="h-5 w-5 text-destructive" />
+            <WifiOff className="h-4 w-4 shrink-0 text-destructive" />
           )}
-          <span className="font-semibold">{device.name}</span>
+          <span className="text-sm font-semibold leading-tight">{device.name}</span>
         </div>
-        <Badge variant={isUp ? 'success' : 'destructive'}>
+        <Badge variant={isUp ? 'success' : 'destructive'} className="text-xs">
           {isUp ? 'Up' : 'Down'}
         </Badge>
       </CardHeader>
-      <CardContent className="pt-0">
-        <p className="text-sm text-muted-foreground">{device.host}</p>
+      <CardContent className="p-3 pt-0">
+        <p className="text-xs text-muted-foreground">{device.host}</p>
         {isUp && device.latency !== undefined && (
-          <p className="mt-1 text-xs text-muted-foreground">
-            {device.latency} ms latency
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {device.latency} ms
           </p>
         )}
         {latencyHistory.length >= 2 && (
-          <div className="mt-2">
+          <div className="mt-1.5">
             <Sparkline history={latencyHistory} />
           </div>
         )}
